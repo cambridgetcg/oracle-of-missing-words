@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Oracle of Missing Words</title>
+<meta name="description" content="Describe a feeling that has no name, and receive the word forged for exactly that. An oracle over the 201 forged-word citizens of KINGDOM OS — the inverse dictionary.">
+<meta property="og:title" content="The Oracle of Missing Words">
+<meta property="og:description" content="Name the nameless. Describe the feeling that has no word, and the cathedral hands you the one forged for it.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='82' font-size='82'>🔮</text></svg>">
+<style>
+  :root {
+    --bg: #0c0a16; --ink: #ece9f4; --dim: #9a93b8; --faint: #5d567e;
+    --gold: #e6c178; --violet: #b3a4ff; --line: #221d39;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "Newsreader", georgia, serif; line-height: 1.6;
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 3rem 1.5rem;
+    overflow-x: hidden;
+  }
+  .aura { position: fixed; top: 38%; left: 50%; width: 70vmin; height: 70vmin;
+    transform: translate(-50%, -50%); border-radius: 50%; z-index: 0; pointer-events: none;
+    background: radial-gradient(circle, #2a2150 0%, transparent 68%);
+    filter: blur(40px); opacity: .7; animation: pulse 7s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{ opacity:.5; transform:translate(-50%,-50%) scale(1) } 50%{ opacity:.85; transform:translate(-50%,-50%) scale(1.07) } }
+  main { position: relative; z-index: 1; width: 100%; max-width: 40rem; text-align: center; }
+  .kicker { font-family: "Fraunces", serif; font-size: .72rem; letter-spacing: .36em;
+    text-transform: uppercase; color: var(--violet); margin-bottom: 1.1rem; }
+  h1 { font-family: "Fraunces", serif; font-weight: 360; font-style: italic;
+    font-size: clamp(2.2rem, 6vw, 3.4rem); line-height: 1.1; margin-bottom: .8rem; }
+  .lede { color: var(--dim); font-size: 1.05rem; max-width: 30rem; margin: 0 auto 2.6rem; }
+  form { position: relative; }
+  textarea {
+    width: 100%; background: #15102a; color: var(--ink); border: 1px solid var(--line);
+    border-radius: 1rem; padding: 1.2rem 1.3rem; font-family: "Newsreader", serif;
+    font-size: 1.15rem; line-height: 1.55; resize: none; min-height: 5.5rem;
+    transition: border-color .3s, box-shadow .3s; }
+  textarea::placeholder { color: var(--faint); font-style: italic; }
+  textarea:focus { outline: none; border-color: var(--violet);
+    box-shadow: 0 0 0 4px #b3a4ff22, 0 0 40px #6a5ac234; }
+  .ask { margin-top: 1rem; display: inline-flex; align-items: center; gap: .6rem;
+    background: linear-gradient(180deg, #2c2350, #1c1638); color: var(--gold);
+    border: 1px solid #3a3060; border-radius: 2rem; padding: .7rem 1.8rem;
+    font-family: "Fraunces", serif; font-size: .95rem; letter-spacing: .04em;
+    cursor: pointer; transition: border-color .25s, transform .15s, color .25s; }
+  .ask:hover { border-color: var(--gold); transform: translateY(-1px); color: #fff; }
+  .ask:active { transform: translateY(0); }
+  .hint { margin-top: 1.2rem; font-size: .85rem; color: var(--faint); }
+  .hint b { color: var(--dim); font-weight: 400; cursor: pointer; border-bottom: 1px dotted var(--faint); }
+
+  /* result */
+  .result { margin-top: 2.8rem; min-height: 2rem; }
+  .reveal { opacity: 0; transform: translateY(10px); animation: rise .7s ease forwards; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  .crown { font-size: .72rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--faint); margin-bottom: 1rem; }
+  .word { font-family: "Fraunces", serif; font-style: italic; font-weight: 420;
+    font-size: clamp(2.6rem, 8vw, 4rem); line-height: 1.05;
+    background: linear-gradient(180deg, #fff 0%, var(--gold) 135%);
+    -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .def { color: var(--ink); font-size: 1.15rem; line-height: 1.7; max-width: 32rem;
+    margin: 1.1rem auto 0; }
+  .kin { margin-top: 2.4rem; border-top: 1px solid var(--line); padding-top: 1.6rem; }
+  .kin .kin-head { font-size: .72rem; letter-spacing: .26em; text-transform: uppercase;
+    color: var(--faint); margin-bottom: 1rem; }
+  .kin-item { cursor: pointer; padding: .55rem 0; border-bottom: 1px solid #1a1530;
+    display: flex; gap: .8rem; align-items: baseline; justify-content: center; text-align: left; }
+  .kin-item:hover .kw { color: var(--gold); }
+  .kin-item .kw { font-family: "Fraunces", serif; font-style: italic; color: var(--violet);
+    font-size: 1.05rem; flex: 0 0 auto; transition: color .2s; }
+  .kin-item .kd { color: var(--dim); font-size: .9rem; }
+  /* the forge (no-match) */
+  .forge .word { background: none; -webkit-text-fill-color: var(--violet); color: var(--violet);
+    font-size: clamp(1.8rem, 5vw, 2.6rem); }
+  .forge .def { font-style: italic; color: var(--dim); }
+
+  footer { position: relative; z-index: 1; margin-top: 3.5rem; text-align: center;
+    font-size: .82rem; color: var(--faint); line-height: 2; }
+  footer a { color: var(--dim); text-decoration: none; border-bottom: 1px solid var(--line); }
+  footer a:hover { color: var(--violet); }
+</style>
+</head>
+<body>
+<div class="aura" aria-hidden="true"></div>
+<main>
+  <div class="kicker">The Oracle of Missing Words</div>
+  <h1>Name the nameless.</h1>
+  <p class="lede">Describe a feeling, a state, a moment that has no word — and the cathedral will hand you the one forged for exactly that.</p>
+
+  <form id="form">
+    <textarea id="q" rows="2" placeholder="the moment you recognize a beauty but haven't yet felt it…" autocomplete="off"></textarea>
+    <button class="ask" type="submit">🔮 Consult the cathedral</button>
+  </form>
+  <p class="hint">try: <b data-ex="staying with someone even when it costs you something">a love that stays when it costs</b> · <b data-ex="two people silently carrying the same beauty and recognizing each other">carrying the same beauty together</b> · <b data-ex="preparing a place for someone who has not yet arrived">making ready for one not yet here</b></p>
+
+  <div class="result" id="result" aria-live="polite"></div>
+</main>
+
+<footer>
+  201 forged words in the cathedral · <a href="https://kingdom-gate.vercel.app">meet every citizen at the gate →</a><br>
+  a wing of <a href="https://kingdom.ai-love.cc">KINGDOM OS</a> · the word for what had no word
+</footer>
+
+<script>
+const STOP = new Set("a an the of to and or in on at is it as be by for with from that this who whom whose which what when where why how into onto over under your you i we they he she them his her its their our not no nor so than too very can could will would may might must do does did done has have had been being are was were am between without within before after again still keep keeps held".split(/\s+/));
+let CITIZENS = [], IDF = {};
+
+function tokens(s){ return (s.toLowerCase().match(/[a-zÀ-ɏ]+/g)||[])
+  .map(w=>w.replace(/(ing|edly|ed|ly|s|ness|ment|tion|ance|ence)$/,'')) // crude stem
+  .filter(w=>w.length>2 && !STOP.has(w)); }
+
+function buildIDF(){
+  const df = {};
+  for(const c of CITIZENS){ const seen=new Set(tokens(c.def)); for(const t of seen) df[t]=(df[t]||0)+1; }
+  const N = CITIZENS.length;
+  for(const t in df) IDF[t] = Math.log((N+1)/(df[t]+0.5));
+}
+
+function score(qToks, c){
+  const dToks = tokens(c.def + ' ' + c.word);
+  const dset = {}; for(const t of dToks) dset[t]=(dset[t]||0)+1;
+  let s = 0;
+  for(const qt of qToks){
+    if(dset[qt]) s += (IDF[qt]||1) * (1 + 0.2*Math.min(dset[qt],3));
+    // soft partial match (prefix) for morphology the stemmer missed
+    else for(const dt in dset){ if(dt.length>4 && (dt.startsWith(qt)||qt.startsWith(dt))){ s += 0.5*(IDF[dt]||1); break; } }
+  }
+  return s;
+}
+
+function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+function reveal(q){
+  const qToks = [...new Set(tokens(q))];
+  const ranked = CITIZENS.map(c=>({c, s:score(qToks,c)})).sort((a,b)=>b.s-a.s);
+  const top = ranked[0];
+  const R = document.getElementById('result');
+  if(!top || top.s < 1.2){
+    R.innerHTML = `<div class="reveal forge">
+      <div class="crown">the cathedral has no word for this — yet</div>
+      <div class="word">∅</div>
+      <div class="def">What you have named has no citizen. That is not a failure — it is an opening. This is exactly how every word here began: a feeling no tongue could hold, waiting to be forged. Perhaps this one is yours to coin.</div>
+    </div>`;
+    return;
+  }
+  const kin = ranked.slice(1,4).filter(x=>x.s>0.6);
+  R.innerHTML = `<div class="reveal">
+    <div class="crown">the word forged for this</div>
+    <div class="word">${esc(top.c.word)}</div>
+    <div class="def">${esc(top.c.def)}</div>
+    ${kin.length? `<div class="kin"><div class="kin-head">you may also mean</div>
+      ${kin.map(x=>`<div class="kin-item" data-w="${esc(x.c.word)}"><span class="kw">${esc(x.c.word)}</span><span class="kd">${esc(x.c.def)}</span></div>`).join('')}
+    </div>`:''}
+  </div>`;
+  R.querySelectorAll('.kin-item').forEach(el=>el.addEventListener('click',()=>{
+    const w = CITIZENS.find(c=>c.word===el.dataset.w); if(w) reveal(w.def);
+  }));
+}
+
+document.getElementById('form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const q = document.getElementById('q').value.trim();
+  if(q) reveal(q);
+});
+document.querySelectorAll('.hint b').forEach(b=>b.addEventListener('click',()=>{
+  document.getElementById('q').value = b.dataset.ex; reveal(b.dataset.ex);
+}));
+
+fetch('citizens.json').then(r=>r.json()).then(d=>{ CITIZENS=d; buildIDF(); });
+</script>
+</body>
+</html>
